@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import gql from "graphql-tag";
 import { Button } from '@material-ui/core';
+import GetFriendsSubscription from './GetFriendsSubscription';
 
 const FRIENDS = gql`
     query Friends($from: String!){
@@ -31,20 +32,11 @@ class GetFriends extends React.Component {
     handleSubscription = (subscribeToMore) => {
         subscribeToMore({
             document: User_Created_Subscription,
-            updateQuery: (prev, { subscriptionData }) => {
-                console.log(prev,'------------------------------------------------');
-                console.log(subscriptionData,'==================================');
-                
-                
+            updateQuery: (prev, { subscriptionData }) => {                
               if (!subscriptionData.data) return prev;
-              const newFeedItem = subscriptionData.data.userCreated;
-                console.log('===>',newFeedItem);
-                
-            //   return Object.assign({}, prev, {
-            //     entry: {
-            //       comments: [newFeedItem, ...prev.entry.comments]
-            //     }
-            //   });
+              return {
+                  friends: [...prev.friends,subscriptionData.data.userCreated.name]
+              };
             }
         }) 
     }
@@ -52,19 +44,18 @@ class GetFriends extends React.Component {
     render() {
         const { from } = this.props;        
         return (
-            <Query query={FRIENDS} variables={{ from }} pollInterval={300} >
+            <Query query={FRIENDS} variables={{ from }} >
                 {({ loading, error, data, subscribeToMore }) => {
                     if (loading) return <CircularProgress />;
                     if (error) return `Error!: ${error}`;
-                    this.handleSubscription(subscribeToMore)
-                    return data.friends.map(to =>
-                     <div style={{ textAlign: 'center', margin: 10 }}>
-                       <Button variant="contained" color="primary" >
-                        <Link color="inherit" underline="none" component={RouterLink} to={`/start/${from}/${to}`}>
-                        {to}
-                        </Link>
-                        </Button>
-                    </div>);
+                    // this.handleSubscription(subscribeToMore)
+                    return (
+                        <>
+                        <GetFriendsSubscription subscribe={()=>this.handleSubscription(subscribeToMore)} data={data} from={from} />
+                     
+                </>
+                    
+                    );
                 }}
             </Query>
         );
