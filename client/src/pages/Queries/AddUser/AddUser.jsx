@@ -1,5 +1,4 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import GetFriends from '../GetFriends';

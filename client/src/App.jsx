@@ -14,7 +14,7 @@ import MyRoute from './pages/MyRoute';
 
 const cache = new InMemoryCache();
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://192.168.1.92:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({

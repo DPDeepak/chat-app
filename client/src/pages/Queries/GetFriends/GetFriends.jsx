@@ -1,10 +1,7 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import gql from "graphql-tag";
-import { Button } from '@material-ui/core';
 import GetFriendsSubscription from './GetFriendsSubscription';
 
 const FRIENDS = gql`
@@ -44,14 +41,13 @@ class GetFriends extends React.Component {
     render() {
         const { from } = this.props;        
         return (
-            <Query query={FRIENDS} variables={{ from }} >
+            <Query query={FRIENDS} variables={{ from }} pollInterval={300} >
                 {({ loading, error, data, subscribeToMore }) => {
                     if (loading) return <CircularProgress />;
                     if (error) return `Error!: ${error}`;
-                    // this.handleSubscription(subscribeToMore)
                     return (
                         <>
-                        <GetFriendsSubscription subscribe={()=>this.handleSubscription(subscribeToMore)} data={data} from={from} />
+                        <GetFriendsSubscription  subscribe={()=>this.handleSubscription(subscribeToMore)} data={data} from={from} />
                      
                 </>
                     

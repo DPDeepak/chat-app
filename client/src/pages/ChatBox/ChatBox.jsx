@@ -33,7 +33,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     menuButton: {
-        marginLeft: -12,
+        marginLeft: 12,
         marginRight: 20,
     },
     rightIcon: {
@@ -69,12 +69,22 @@ class ChatBox extends React.Component {
         })
     }
 
+    keyPressed(event, sendMessage, to, from, message) {
+        if (event.key === "Enter") {
+            sendMessage({ variables: { to, from, message } });
+            this.setState({
+                message: '',
+            })
+        }
+    }
+
     render() {
         const { match, classes } = this.props;
         const { message } = this.state;
         const { from, to } = match.params;
         return (
-            <div className={classes.root}>
+            <div className={classes.root} style={{ backgroundImage: "url('/images/back2.jpeg')" }}>
+
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6" color="inherit" className={classes.grow}>
@@ -91,7 +101,7 @@ class ChatBox extends React.Component {
                     </Toolbar>
 
                 </AppBar>
-                <div style={{ overflow: "scroll", height: 570 }}>
+                <div style={{ overflow: "scroll", height: 725 }}>
                     <GetMessages to={to} from={from} />
                 </div>
                 <Mutation mutation={SEND_MESSAGE}>
@@ -99,7 +109,12 @@ class ChatBox extends React.Component {
                         <TextField
                             value={message}
                             label="Message"
+                            onKeyPress={(event) => {
+                                if (message)
+                                    this.keyPressed(event, sendMessage, to, from, message)
+                            }}
                             fullWidth
+                            style={{position:"sticky"}}
                             onChange={this.handlechange('message')}
                             margin="normal"
                             variant="outlined"
@@ -110,7 +125,7 @@ class ChatBox extends React.Component {
                                             if (message) {
                                                 this.handleClick(e, sendMessage, to, from, message);
                                             }
-                                        }}>
+                                        }}  >
                                             <Send />
                                         </IconButton>
                                     </InputAdornment>

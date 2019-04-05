@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { GetUser } from '../Queries'
 import AddUser from '../Queries/AddUser';
-
+    
 const Style = {
     marginTop: 375,
     marginLeft: 700,

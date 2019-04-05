@@ -22,7 +22,7 @@ class GetMessages extends React.Component {
     render() {
         const { to, from } = this.props;
         return (
-            <Query query={MESSAGES} >
+            <Query query={MESSAGES} pollInterval={300} >
                 {({ loading, error, data, subscribeToMore }) => {
                     if (loading) return <CircularProgress />;
                     if (error) return `Error!: ${error}`;

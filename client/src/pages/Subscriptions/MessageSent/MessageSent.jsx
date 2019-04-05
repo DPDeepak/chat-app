@@ -1,6 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { TextField } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 const CHAT_CHANNEL = gql`
     subscription{
@@ -11,6 +13,15 @@ const CHAT_CHANNEL = gql`
     }
 }
 `;
+
+const styles = theme => ({
+    root: {
+      ...theme.typography.button,
+      backgroundColor: theme.palette.common.white,
+      padding: theme.spacing.unit,
+    },
+  });
+  
 
 class MessageSent extends React.Component {
     constructor(props) {
@@ -39,15 +50,16 @@ class MessageSent extends React.Component {
             if (message) {
                 if (message.to === to && message.from === from) {
                     return (
-                        <div style={{textAlign:"end"}}>
+                        <div style={{ textAlign: "end" }}>
                             <TextField
                                 value={message.message}
                                 label={from}
+                                // multiline={true}
                                 margin="normal"
                                 variant="outlined"
-                                readOnly
                             />
                         </div>
+                        //  <div className={this.props.classes.root}>{message.message}</div>
                     );
                 }
                 if (message.to === from && message.from === to) {
@@ -56,16 +68,21 @@ class MessageSent extends React.Component {
                             <TextField
                                 value={message.message}
                                 label={to}
+                                // multiline={true}
                                 margin="normal"
                                 variant="outlined"
-                                readOnly
                             />
                         </div>
+                        // <div className={this.props.classes.root}>{message.message}</div>
                     );
                 }
             }
-            });
+        });
     }
 }
+MessageSent.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+  
 
-export default MessageSent;
+export default withStyles(styles)(MessageSent);
